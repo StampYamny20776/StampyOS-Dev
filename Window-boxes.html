@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Window Component</title>
+    <style>
+        body {
+            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Window Styling */
+        .window {
+            position: absolute;
+            width: 400px;
+            height: 250px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .window-header {
+            background: #0078d4;
+            color: white;
+            padding: 10px;
+            font-size: 16px;
+            cursor: grab;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .window-header .close-btn {
+            background: #ff5c5c;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .window-header .close-btn:hover {
+            background: #e04848;
+        }
+
+        .window-content {
+            padding: 15px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        /* Window Animation */
+        @keyframes fadeIn {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Window Component -->
+    <div id="appWindow" class="window">
+        <div class="window-header">
+            <span>App Window</span>
+            <button class="close-btn" onclick="closeWindow()">X</button>
+        </div>
+        <div class="window-content">
+            <p>This is a sample app window.</p>
+        </div>
+    </div>
+
+    <button onclick="openWindow()" style="margin: 20px; padding: 10px; font-size: 16px;">Open App</button>
+
+    <script>
+        let isDragging = false, offsetX, offsetY;
+
+        function openWindow() {
+            const windowElement = document.getElementById("appWindow");
+            windowElement.style.display = "block";
+            windowElement.style.left = "50px";
+            windowElement.style.top = "50px";
+        }
+
+        function closeWindow() {
+            document.getElementById("appWindow").style.display = "none";
+        }
+
+        const windowElement = document.getElementById("appWindow");
+        const header = windowElement.querySelector(".window-header");
+
+        header.addEventListener("mousedown", (e) => {
+            isDragging = true;
+            offsetX = e.clientX - windowElement.offsetLeft;
+            offsetY = e.clientY - windowElement.offsetTop;
+            header.style.cursor = "grabbing";
+        });
+
+        document.addEventListener("mousemove", (e) => {
+            if (isDragging) {
+                windowElement.style.left = e.clientX - offsetX + "px";
+                windowElement.style.top = e.clientY - offsetY + "px";
+            }
+        });
+
+        document.addEventListener("mouseup", () => {
+            isDragging = false;
+            header.style.cursor = "grab";
+        });
+    </script>
+
+</body>
+</html>
